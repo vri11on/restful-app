@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="1" author="restful-app" dbms="postgresql">
+        <createTable tableName="genre">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="pk_genre_id" />
+            </column>
+            <column name="creation_ts" type="timestamp"/>
+            <column name="update_ts" type="timestamp"/>
+            <column name="description" type="varchar(1000)">
+            </column>
+        </createTable>
+
+        <createTable tableName="book">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="pk_book_id"/>
+            </column>
+            <column name="creation_ts" type="timestamp"/>
+            <column name="update_ts" type="timestamp"/>
+            <column name="isbn" type="varchar(255)"/>
+            <column name="genre_id" type="bigint"/>
+            <column name="author_id" type="bigint"/>
+        </createTable>
+
+        <createTable tableName="author">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="pk_author_id"/>
+            </column>
+            <column name="creation_ts" type="timestamp"/>
+            <column name="update_ts" type="timestamp"/>
+            <column name="first_name" type="varchar(255)"/>
+            <column name="last_name" type="varchar(255)"/>
+            <column name="middle_name" type="varchar(255)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="book"
+                                 baseColumnNames="genre_id"
+                                 constraintName="fk_book_genre_id"
+                                 referencedTableName="genre"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="book"
+                                 baseColumnNames="author_id"
+                                 constraintName="fk_book_author_id"
+                                 referencedTableName="author"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="2" author="restful-app">
+        <addAutoIncrement tableName="genre" columnName="id"/>
+        <addAutoIncrement tableName="book" columnName="id"/>
+        <addAutoIncrement tableName="author" columnName="id"/>
+    </changeSet>
+
+    <changeSet id="3" author="restful-app">
+        <addColumn tableName="author">
+            <column name="birth_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
